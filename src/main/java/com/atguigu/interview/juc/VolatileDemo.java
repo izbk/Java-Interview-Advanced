@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class MyData{
-    // 可见性验证，可注释后体验效果
+    /**
+     * 可见性验证，可注释后体验效果
+     */
     volatile int number = 0;
     AtomicInteger atomic = new AtomicInteger(0);
     public void add(){
@@ -17,6 +19,29 @@ class MyData{
         atomic.getAndIncrement();
     }
 }
+class ReSortSeqDemo{
+    int a = 0;
+    boolean flag = false;
+
+    public void method(){
+        a = 1;
+        flag = true;
+    }
+    /**
+     * 多线程环境中线程交替执行，由于编译器优化指令重排序的存在
+     * 两个线程中使用的变量能够保证一致性无法确定
+     */
+    public void method2(){
+        if(flag){
+            a = a + 5;
+            System.out.println("a="+a);
+        }
+    }
+}
+
+/**
+ * @author
+ */
 public class VolatileDemo {
     public static void main(String[] args) {
         noAtomicVolatile();
@@ -63,5 +88,7 @@ public class VolatileDemo {
         }
         System.out.println(Thread.currentThread().getName()+" task is over");
     }
+
+
 
 }
